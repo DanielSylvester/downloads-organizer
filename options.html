@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloads Organizer — Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      color: #1a1a1a;
+      padding: 32px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #888; margin-bottom: 28px; }
+
+    section {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+
+    section h2 { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+    section .desc { font-size: 12px; color: #888; margin-bottom: 16px; }
+
+    .rules-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .rules-table th { text-align: left; padding: 6px 10px; background: #f3f4f6; color: #666; font-weight: 600; border-bottom: 1px solid #e5e7eb; }
+    .rules-table td { padding: 6px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+    .rules-table tr:last-child td { border-bottom: none; }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+    .badge-scripts     { background: #dbeafe; color: #1d4ed8; }
+    .badge-automations { background: #fef3c7; color: #92400e; }
+    .badge-creatives   { background: #fce7f3; color: #9d174d; }
+    .badge-docs        { background: #d1fae5; color: #065f46; }
+    .badge-reports     { background: #ede9fe; color: #5b21b6; }
+    .badge-others      { background: #f3f4f6; color: #374151; }
+
+    .add-row { display: flex; gap: 8px; margin-top: 12px; }
+    .add-row input, .add-row select {
+      flex: 1; padding: 7px 10px; border: 1px solid #d1d5db;
+      border-radius: 6px; font-size: 13px; color: #1a1a1a; background: #fff;
+    }
+    .add-row input:focus, .add-row select:focus { outline: none; border-color: #4f46e5; }
+
+    .btn { padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s; }
+    .btn-primary { background: #4f46e5; color: #fff; }
+    .btn-primary:hover { background: #4338ca; }
+
+    .custom-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .custom-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 10px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px;
+    }
+    .custom-item .item-label { flex: 1; color: #374151; }
+    .custom-item .item-label strong { color: #1a1a1a; }
+    .btn-delete { background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; line-height: 1; padding: 0 4px; transition: color 0.15s; }
+    .btn-delete:hover { color: #e53e3e; }
+    .empty { font-size: 12px; color: #bbb; padding: 8px 0; }
+
+    #saveBanner {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #10b981; color: #fff; font-size: 13px; font-weight: 600;
+      padding: 10px 18px; border-radius: 8px; display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <h1>📂 Downloads Organizer</h1>
+  <p class="subtitle">Files are sorted into <code>Month Year / Category / filename</code> automatically.</p>
+
+  <section>
+    <h2>Default file type rules</h2>
+    <p class="desc">These are built-in and always active. They run after domain and keyword rules.</p>
+    <table class="rules-table">
+      <thead><tr><th>Category</th><th>Extensions</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-scripts">Scripts</span></td><td>.py, .gs, .js, .ts, .sh, .bat, .ps1, .rb, .php, .lua, .r, .m</td></tr>
+        <tr><td><span class="badge badge-automations">Automations</span></td><td>.zip, .rar, .tar, .gz, .7z, .bz2, .xz, .tgz</td></tr>
+        <tr><td><span class="badge badge-creatives">Creatives</span></td><td>.jpg, .jpeg, .png, .gif, .webp, .svg, .ico, .bmp, .tiff, .mp4, .mov, .avi, .mkv, .webm, .flv, .psd, .ai, .eps, .sketch, .fig</td></tr>
+        <tr><td><span class="badge badge-docs">Docs</span></td><td>.pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt, .csv, .odt, .ods, .rtf, .pages, .numbers, .key, .md</td></tr>
+        <tr><td><span class="badge badge-reports">Reports</span></td><td><em>Matched by keyword or domain rules</em></td></tr>
+        <tr><td><span class="badge badge-others">Others</span></td><td><em>Anything that doesn't match above</em></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Default keyword rules → Reports</h2>
+    <p class="desc">Files whose name contains any of these words are routed to <strong>Reports</strong>. Checked before extension rules.</p>
+    <table class="rules-table">
+      <thead><tr><th>Keywords</th><th>Category</th></tr></thead>
+      <tbody>
+        <tr><td>report, invoice, statement, receipt, summary, analytics, export</td><td><span class="badge badge-reports">Reports</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Default domain rules → Reports</h2>
+    <p class="desc">Downloads from these sites are routed to <strong>Reports</strong>. Checked first, before keywords and extensions.</p>
+    <table class="rules-table">
+      <thead><tr><th>Domain</th><th>Category</th></tr></thead>
+      <tbody>
+        <tr><td>ads.google.com, analytics.google.com</td><td><span class="badge badge-reports">Reports</span></td></tr>
+        <tr><td>business.facebook.com, ads.facebook.com, adsmanager.facebook.com, meta.com</td><td><span class="badge badge-reports">Reports</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Custom keyword rules</h2>
+    <p class="desc">If the filename contains this keyword, route to the chosen category.</p>
+    <div class="add-row">
+      <input type="text" id="keywordInput" placeholder='e.g. "brief" or "contract"'>
+      <select id="keywordCategory">
+        <option value="Scripts">Scripts</option>
+        <option value="Automations">Automations</option>
+        <option value="Creatives">Creatives</option>
+        <option value="Docs">Docs</option>
+        <option value="Reports" selected>Reports</option>
+        <option value="Others">Others</option>
+      </select>
+      <button class="btn btn-primary" id="addKeyword">Add</button>
+    </div>
+    <div class="custom-list" id="keywordList"></div>
+  </section>
+
+  <section>
+    <h2>Custom domain rules</h2>
+    <p class="desc">Downloads from this domain go to the chosen category. Takes highest priority.</p>
+    <div class="add-row">
+      <input type="text" id="domainInput" placeholder='e.g. "drive.google.com"'>
+      <select id="domainCategory">
+        <option value="Scripts">Scripts</option>
+        <option value="Automations">Automations</option>
+        <option value="Creatives">Creatives</option>
+        <option value="Docs">Docs</option>
+        <option value="Reports" selected>Reports</option>
+        <option value="Others">Others</option>
+      </select>
+      <button class="btn btn-primary" id="addDomain">Add</button>
+    </div>
+    <div class="custom-list" id="domainList"></div>
+  </section>
+
+  <div id="saveBanner">✓ Saved</div>
+  <script src="options.js"></script>
+</body>
+</html>
